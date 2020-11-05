@@ -1,0 +1,27 @@
+{% load static %}
+
+<html>
+<head>
+
+    <title>
+        {% block title %}
+        {% endblock %}
+    </title>
+
+    <link rel="stylesheet" type="text/css" href="{% static 'style.css' %}">
+
+    {% block head %}
+    {% endblock %}
+
+</head>
+<body>
+
+    {% include 'header.html' %}
+
+    <div id="main">
+        {% block content %}
+        {% endblock %}
+    </div>
+
+</body>
+</html>

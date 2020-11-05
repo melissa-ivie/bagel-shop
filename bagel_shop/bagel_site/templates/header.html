@@ -1,0 +1,57 @@
+{% load static %}
+
+<link rel="stylesheet" type="text/css" href="{% static 'header.css' %}">
+
+<script>
+    let isDropdownVisible = false;
+
+    function toggleDropdown() {
+        dropdownVisibility(!isDropdownVisible)
+    }
+
+    function dropdownVisibility(show) {
+        let dropdown = document.getElementById("acct-dropdown");
+        if (show) {
+            dropdown.style.top = '60pt';
+            isDropdownVisible = true;
+        }
+        else {
+            dropdown.style.top = '-20';
+            isDropdownVisible = false;
+        }
+    }
+
+    function signOut() {
+        // TODO: Insert code for signing out a user
+        window.open('/accounts/logout','_self');
+    }
+</script>
+
+<div id="header-bar">
+    <div id="header-container">
+        <div id="title">
+            <a href="/">Dan's Bagel Shop</a>
+        </div>
+
+    {% if authenticated %}
+        <button class="cta light-text header-cta" id="account-name" onclick="toggleDropdown(true)">
+            {{first_name}} {{last_name}}
+            <img src="{% static 'images/icons/expand_arrow.png' %}">
+        </button>
+    {% else %}
+        <button class="cta light-filled header-cta" id="login-action" onclick="window.open('/accounts/login','_self')">
+            Sign In
+        </button>
+        <button class="cta light-text header-cta" id="create-action" onclick="window.open('/accounts/create','_self')">
+            Create Account
+        </button>
+    {% endif %}
+    </div>
+</div>
+
+{% if authenticated %}
+<div id="acct-dropdown">
+    <div class="dropdown-option" onclick="window.open('/accounts/view','_self')"><a>View Account</a></div>
+    <div class="dropdown-option" onclick="signOut()"><a>Sign Out</a></div>
+</div>
+{% endif %}

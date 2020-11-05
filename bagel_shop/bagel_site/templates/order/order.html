@@ -1,0 +1,254 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+{% block title %}
+Order
+{% endblock %}
+
+
+{% block head %}
+<link rel="stylesheet" type="text/css" href="{% static 'order/style-order.css' %}">
+
+<script>
+
+    const BAGEL = 0;
+    const SPREAD = 1;
+    const TOPPING = 2;
+    const DRINK = 3;
+
+    let cart = [];
+
+    // Parse JSON
+    {% autoescape off %}
+    let bagelsParsed = JSON.parse('{{ bagels }}');
+    let spreadsParsed = JSON.parse('{{ spreads }}');
+    let toppingsParsed = JSON.parse('{{ toppings }}');
+    {% endautoescape %}
+
+
+    /**
+     * Controls single select button tiles. Selects the element the user clicked on and deselects all others
+     *
+     * @param id the id of the DOM element that was clicked
+     * @param name the element's name. All elements with this name will be deselected
+     */
+    function singleSelect(id, name) {
+
+        // Deselect all DOM elements with the provided name
+        let all = document.getElementsByClassName("selected");
+        for (let i = 0; i < all.length; i++) {
+            let element = all[i];
+            if (element.getAttribute("name") === name) {
+                element.classList.remove("selected");
+                element.classList.add("deselected");
+            }
+        }
+
+        // Select the element with the provided id
+        let clicked = document.getElementById(id);
+        clicked.classList.remove("deselected");
+        clicked.classList.add("selected");
+
+        // Update the order
+        updateOrder()
+    }
+
+
+    /**
+     * Controls multi select button tiles
+     *
+     * @param id the id of the DOM element that was clicked
+     */
+    function multiSelect(id) {
+
+        // Toggle the element between selected and unselected
+        let clicked = document.getElementById(id);
+        if (clicked.classList.contains("deselected")) {
+            clicked.classList.remove("deselected");
+            clicked.classList.add("selected");
+        }
+        else {
+            clicked.classList.remove("selected");
+            clicked.classList.add("deselected");
+        }
+
+        // Update the order
+        updateOrder()
+    }
+
+    /**
+     * Updates the order table for the user to see
+     */
+    function updateOrder() {
+
+        cart = [];
+
+        // Clear the current table
+        let cartTable = document.getElementById("cart-table");
+        cartTable.innerHTML = '';
+
+        // Get all the selected elements
+        let selected = document.querySelectorAll(".selected");
+        let totalPrice = 0;
+
+        for (let i=0; i<selected.length; i++) {
+
+            // For each selected item, find its type and pk
+            let type = selected[i].getAttribute("name");
+            let pk = selected[i].getAttribute("id");
+            cart.push(pk);
+
+            // Create new HTML elements for the table
+            let itemName  = document.createElement('td');
+            let itemPrice  = document.createElement('td');
+            let row = document.createElement('tr');
+            row.appendChild(itemName);
+            row.appendChild(itemPrice);
+            cartTable.appendChild(row);
+
+            let price = 0;
+
+            // Fill in the data for the table
+            if (type==="bagel") {
+                row.style.fontWeight = "bold";
+                price = bagelsParsed[bagelLookup(pk)]["fields"]["price"];
+                itemPrice.innerText = "$" + price.toFixed(2);
+                itemName.innerText = bagelsParsed[bagelLookup(pk)]["fields"]["description"] + " Bagel";
+            }
+            else if (type==="spread") {
+                price = spreadsParsed[spreadLookup(pk)]["fields"]["price"];
+                itemPrice.innerText = "$" + price.toFixed(2);
+                itemName.innerText = "+ " + spreadsParsed[spreadLookup(pk)]["fields"]["description"] + " Spread";
+            }
+            else if (type==="topping") {
+                price = toppingsParsed[toppingLookup(pk)]["fields"]["price"];
+                itemPrice.innerText = "$" + price.toFixed(2);
+                itemName.innerText = "+ " + toppingsParsed[toppingLookup(pk)]["fields"]["description"];
+            }
+
+            totalPrice += price;
+        }
+
+        // Add in the total row
+        // TODO: Actually make this calculate the total
+        cartTable.innerHTML  = cartTable.innerHTML +
+            "<tr style=\"border-top: 1pt solid white; font-weight: bold;\">\n" +
+            "     <td style=\"padding-top: 10pt\">\n" +
+            "          TOTAL:\n" +
+            "     </td>\n" +
+            "     <td id=\"total-amount\" style=\"padding-top: 10pt\">\n" +
+            "$" + totalPrice.toFixed(2) +
+            "     </td>\n" +
+            "</tr>";
+    }
+
+    // TODO: Make all three of these just one lookup function
+    function bagelLookup(pk) {
+        for (let i=0; i<bagelsParsed.length; i++) {
+            if (bagelsParsed[i]["pk"].toString()===pk) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    function spreadLookup(pk) {
+        for (let i=0; i<spreadsParsed.length; i++) {
+            if (spreadsParsed[i]["pk"].toString()===pk) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    function toppingLookup(pk) {
+        for (let i=0; i<toppingsParsed.length; i++) {
+            if (toppingsParsed[i]["pk"].toString()===pk) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+</script>
+
+{% endblock %}
+
+
+{% block content %}
+<h1>New Order</h1>
+
+<table id="layout-table">
+    <tr>
+        <td style="vertical-align: top">
+            <h2>Bagel</h2>
+            <div id="bagelOptions"></div>
+
+            <h2>Spread</h2>
+            <div id="spreadOptions"></div>
+
+            <h2>Toppings</h2>
+            <div id="toppingOptions"></div>
+
+        </td>
+        <td style="vertical-align: top">
+            <div id="cart-container">
+
+                <h3 style="text-align: center">Order</h3>
+
+                <table id="cart-table">
+                    <tr style="border-top: 1pt solid white; font-weight: bold;">
+                        <td style="padding-top: 10pt">
+                            TOTAL:
+                        </td>
+                        <td id="total-amount" style="padding-top: 10pt">
+                            $0.00
+                        </td>
+                    </tr>
+                </table>
+
+                <button class="cta light-filled" style="margin-top: 20pt; width: 100%" onclick="alert('JSON: ' + JSON.stringify(cart))">Place Order</button>
+            </div>
+        </td>
+    </tr>
+</table>
+
+<script>
+    // Load the options into the page
+
+    let bagel_options = document.getElementById("bagelOptions");
+    for (let i=0; i<bagelsParsed.length; i++) {
+        let button = document.createElement("button");
+        button.setAttribute('name', 'bagel');
+        button.setAttribute('class', 'menu-button single-select deselected');
+        button.setAttribute('onclick', 'singleSelect(\'' + bagelsParsed[i]["pk"] + '\', \'bagel\')');
+        button.setAttribute('id', bagelsParsed[i]["pk"]);
+        button.innerText = bagelsParsed[i]["fields"]["description"];
+        bagel_options.appendChild(button);
+    }
+
+    let spread_options = document.getElementById("spreadOptions");
+    for (let i=0; i<spreadsParsed.length; i++) {
+        let button = document.createElement("button");
+        button.setAttribute('name', 'spread');
+        button.setAttribute('class', 'menu-button multi-select deselected');
+        button.setAttribute('onclick', 'multiSelect(\'' + spreadsParsed[i]["pk"] + '\', \'spread\')');
+        button.setAttribute('id', spreadsParsed[i]["pk"]);
+        button.innerText = spreadsParsed[i]["fields"]["description"];
+        spread_options.appendChild(button);
+    }
+
+    let topping_options = document.getElementById("toppingOptions");
+    for (let i=0; i<toppingsParsed.length; i++) {
+        let button = document.createElement("button");
+        button.setAttribute('name', 'topping');
+        button.setAttribute('class', 'menu-button multi-select deselected');
+        button.setAttribute('onclick', 'multiSelect(\'' + toppingsParsed[i]["pk"] + '\', \'topping\')');
+        button.setAttribute('id', toppingsParsed[i]["pk"]);
+        button.innerText = toppingsParsed[i]["fields"]["description"];
+        topping_options.appendChild(button);
+    }
+</script>
+
+{% endblock %}

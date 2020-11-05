@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+{% block title %}
+Login
+{% endblock %}
+
+
+{% block head %}
+<link rel="stylesheet" type="text/css" href="{% static 'accounts/style-login.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'form.css' %}">
+{% endblock %}
+
+
+{% block content %}
+<form action="/accounts/login" method="post">
+    {% csrf_token %}
+    <div class="title">Sign In</div>
+    <hr>
+
+    <label><b>Email</b></label>
+    <input type="text" placeholder="Enter Email" name="email" required>
+    <div id="email-message" class="field-message">Account does not exist</div>
+
+    <label><b>Password</b></label>
+    <input type="password" placeholder="Enter Password" name="pwd" required>
+    <div id="pw-message" class="field-message">Incorrect password</div>
+
+    <button type="submit" class="cta dark-filled form-action" id="submit">Sign In</button>
+
+    <div style="height: 70pt;"></div>
+</form>
+
+    <button class="cta dark-text bottom-link" onclick="window.open('/accounts/reset-password','_self')">Reset Account Password</button>
+    <button class="cta dark-text bottom-link" onclick="window.open('/accounts/create','_self')">Create New Account</button>
+
+{% endblock %}

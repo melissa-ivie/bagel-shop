@@ -1,0 +1,8 @@
+#cancel {
+    background-color: var(--warning);
+    margin-right: 5pt;
+}
+
+#cancel:hover {
+    background-color: var(--warning-dark);
+}

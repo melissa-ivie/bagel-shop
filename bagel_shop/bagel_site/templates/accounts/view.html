@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+{% block title %}
+Account
+{% endblock %}
+
+
+{% block head %}
+<link rel="stylesheet" type="text/css" href="{% static 'accounts/style-view.css' %}">
+{% endblock %}
+
+
+{% block content %}
+<h1>Account View Page</h1>
+
+<p>Dummy content for the view account page</p>
+
+<button class="cta dark-filled" onclick="window.open('/','_self')">Back</button>
+<button class="cta dark-filled" onclick="window.open('/accounts/edit','_self')">Edit Your Account</button>
+{% endblock %}

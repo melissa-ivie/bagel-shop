@@ -1,0 +1,42 @@
+.selected {
+    background-color: var(--secondary);
+    color: black;
+}
+
+.selected:hover {
+    background-color: var(--secondary-dark);
+}
+
+.deselected {
+    background-color: var(--primary);
+    color: white;
+}
+
+.deselected:hover {
+    background-color: var(--primary-dark);
+}
+
+.menu-button {
+    padding: 14px 20px;
+    cursor: pointer;
+    opacity: 1;
+    font-size: inherit;
+    border: none;
+}
+
+#layout-table {
+    width: 100%;
+}
+
+#cart-container {
+    background-color: var(--primary-dark);
+    padding: 10pt;
+    width: 100%;
+    color: white;
+}
+
+#cart-table {
+    width: 100%;
+    border-collapse: collapse;
+    color: inherit;
+}

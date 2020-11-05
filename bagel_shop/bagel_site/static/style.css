@@ -1,0 +1,88 @@
+/* Declare template colors here */
+:root {
+    --primary: #646464;
+    --primary-dark: #404040;
+    --primary-dark-dark: #242424;
+    --warning: #f45348;
+    --warning-dark: #eb3e23;
+    --secondary: #ffbb34;
+    --secondary-light: #ffe7c5;
+    --secondary-dark: #c99328;
+
+}
+
+body {
+    font-family: sans-serif;
+    font-size: 14pt;
+    margin-bottom: 70pt;
+    background-image: url("images/background_bagel.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+}
+
+#main {
+    padding: 80pt 5%;
+    margin: auto;
+    width: 75%;
+    background-color: rgba(255, 255, 255, 0.8);
+    min-height: 100%;
+}
+
+h1 {
+    text-align: center;
+}
+
+hr {
+    border: 1px solid #999;
+    margin-top: 20pt;
+    margin-bottom: 20pt;
+}
+
+.title {
+    font-size: 30pt;
+}
+
+.cta {
+    padding: 14px 20px;
+    cursor: pointer;
+    opacity: 1;
+    font-size: inherit;
+    border: none;
+}
+
+.dark-filled {
+    background-color: var(--primary);
+    color: white;
+}
+
+.dark-filled:hover {
+    background-color: var(--primary-dark);
+}
+
+.light-filled {
+    background-color: white;
+    color: var(--primary);
+}
+
+.light-filled:hover {
+    opacity: 0.9;
+}
+
+.dark-text {
+    background-color: transparent;
+    color: var(--primary);
+}
+
+.dark-text:hover {
+    color: var(--primary-dark);
+}
+
+.light-text {
+    background-color: transparent;
+    color: white;
+}
+
+.light-text:hover {
+    opacity: 0.7;
+}

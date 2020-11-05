@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+{% block title %}
+Create Account
+{% endblock %}
+
+
+{% block head %}
+<link rel="stylesheet" type="text/css" href="{% static 'accounts/style-create.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'form.css' %}">
+
+<script>
+
+    function checkPW() {
+        let pwBox = document.getElementById("password");
+        let confirmBox = document.getElementById("confirm");
+        let confirmPwMessage = document.getElementById("confirm-pw-message");
+
+        if (pwBox.value !== confirmBox.value) {
+            confirmBox.style.border = "2px solid var(--warning)";
+            confirmPwMessage.style.display = "block";
+        }
+        else {
+            confirmBox.style.border = "none";
+            confirmPwMessage.style.display = "none";
+        }
+    }
+</script>
+{% endblock %}
+
+
+{% block content %}
+<form action="/accounts/create" method="post"> 
+    {% csrf_token %} <!-- Necessary for posting to /accounts/create -->
+    <div class="title">Create Account</div>
+
+    <hr>
+
+    <label><b>First Name</b></label>
+    <input type="text" placeholder="Enter first name" name="fname" required>
+
+    <label><b>Last Name</b></label>
+    <input type="text" placeholder="Enter last name" name="lname" required>
+
+    <label><b>Phone</b></label>
+    <input type="text" placeholder="Enter mobile phone number" name="phone" required>
+
+    <hr>
+
+    <label><b>Email</b></label>
+    <input type="text" placeholder="Enter email" name="email" required>
+
+    <label><b>Password</b></label>
+    <input id="password" type="password" placeholder="Enter password" name="pwd" onchange="checkPW()" required>
+
+    <label><b>Confirm Password</b></label>
+    <input id="confirm" type="password" placeholder="Re-enter password" name="pwd" onchange="checkPW()" required>
+    <div id="confirm-pw-message" class="field-message">Password does not match</div>
+    {% if error %}
+        <p> Account with email already exists </p>
+    {% endif %}
+
+    <button type="submit" class="cta dark-filled form-action" id="submit">Create Account</button>
+    <button type="reset" class="cta dark-filled form-action" id="cancel" onclick="window.history.back()">Cancel</button>
+
+    <div style="height: 70pt;"></div>
+
+    <button class="cta dark-text bottom-link" onclick="window.open('/accounts/login','_self')">Sign in to existing account</button>
+</form>
+
+
+
+{% endblock %}
+

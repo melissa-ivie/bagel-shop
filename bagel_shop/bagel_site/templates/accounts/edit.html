@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+{% block title %}
+Edit Account
+{% endblock %}
+
+
+{% block head %}
+<link rel="stylesheet" type="text/css" href="{% static 'accounts/style-edit.css' %}">
+
+<script>
+    function save() {
+        window.open('/accounts/view','_self');
+    }
+</script>
+{% endblock %}
+
+
+{% block content %}
+<h1>Account Edit Page</h1>
+<p>Make changes to your account here</p>
+<button id="cancel" class="cta dark-filled" type="reset" onclick="window.open('/accounts/view','_self')">Cancel</button>
+<button class="cta dark-filled" onclick="save()">Save Changes</button>
+{% endblock %}
